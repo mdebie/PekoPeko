@@ -1,0 +1,10 @@
+# compiled output
+/dist
+/tmp
+/out-tsc
+
+key.pem
+secrets
+node_modules
+.env
+.vscode
