@@ -10,7 +10,7 @@ import { createServer } from './server'
 
 export async function init() {
   try {
-    const port = Number(serverConfig.server.port) || 8080
+    const port = Number(serverConfig.server.port) || 3000
     const app = await createServer()
 
     app.listen(port)

@@ -6,7 +6,8 @@ import koa_response_time = require('koa-response-time')
 import { Logger } from 'pino'
 import { Container } from 'typedi'
 import { createContainer } from './container'
-import * as initHealth from './controllers/health'
+import * as health from './controllers/health'
+import * as init from './controllers/init'
 import { AppServer } from './server-utils/AppServer'
 import { errorHandler } from './server-utils/error-handler'
 
@@ -28,7 +29,8 @@ export async function createServer(): Promise<AppServer> {
     .use(bodyParser())
     .use(errorHandler(logger))
 
-  initHealth.init(app)
+  health.init(app)
+  init.init(app)
 
   return new AppServer(app, logger)
 }
