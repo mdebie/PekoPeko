@@ -6,3 +6,8 @@ export const serverConfig = {
     port: _.SERVER_PORT
   }
 }
+
+export const slackConfig = {
+  token: _.SLACK_TOKEN,
+  channel: _.SLACK_CHANNEL
+}
