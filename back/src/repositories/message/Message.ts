@@ -1,9 +1,11 @@
 import { Service } from 'typedi'
 import { SlackLib } from '../../lib/slack/Slack'
+import { driverExists } from './driverExists.json'
 import { initDriver } from './initDriver.json'
 import { Message } from './MessageEntity'
+import { thanks } from './thanks.json'
 
-type MessageType = 'initDriver'
+type MessageType = 'initDriver' | 'thanks' | 'driverExists'
 
 @Service()
 export class MessageRepository {
@@ -11,7 +13,9 @@ export class MessageRepository {
 
   constructor(private slack: SlackLib) {
     this._switch = {
-      initDriver
+      initDriver,
+      thanks,
+      driverExists
     }
   }
 
@@ -30,7 +34,7 @@ export class MessageRepository {
    * Post a message to all users in channel
    * @param message
    */
-  public async postMessage(message: Message): Promise<boolean> {
+  public async postMessage(message: Message): Promise<void> {
     return this.slack.postMessage(message)
   }
 }

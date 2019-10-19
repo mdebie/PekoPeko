@@ -6,11 +6,13 @@ import {
   SectionBlock
 } from '@slack/types'
 import { Item } from '../../entities/Item'
+import { SlackActionEnum } from '../../lib/slack/actions.enum'
 import { Message } from './MessageEntity'
 
 export const initDriver = (
   items: Item[] = [],
-  highlightItem: Item
+  highlightItem?: Item,
+  driver?: string
 ): Message => {
   let fields = {}
   if (Array.isArray(items) && items.length) {
@@ -36,8 +38,56 @@ export const initDriver = (
       alt_text: highlightItem ? highlightItem.label : 'Plat du jour'
     } as ImageBlock)
   }
+  const driverBlock: Block[] = []
+  if (driver) {
+    driverBlock.push({
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: `${driver} est le chauffeur du jour :truck:`
+      }
+    } as SectionBlock)
+  } else {
+    driverBlock.push({
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: '*Un chauffeur ! Un chauffeur ! Mon royaume pour un chauffeur !*'
+      },
+      accessory: {
+        type: 'button',
+        text: {
+          type: 'plain_text',
+          text: 'Je serai votre chauffeur'
+        },
+        style: 'primary',
+        confirm: {
+          title: {
+            text: "Votre mission si vous l'acceptez",
+            type: 'plain_text'
+          },
+          confirm: {
+            text: 'Accepter',
+            type: 'plain_text'
+          },
+          deny: {
+            text: 'Annuler',
+            type: 'plain_text'
+          },
+          text: {
+            text:
+              "Aller chercher la commande de tout le monde ce midi. :truck: Attention c'est une mission dangereuse, le sort de collègues affamés est entre vos mains ! :warning:",
+            type: 'mrkdwn'
+          }
+        },
+        value: SlackActionEnum.user_accepted_drive,
+        action_id: SlackActionEnum.user_accepted_drive
+      }
+    } as SectionBlock)
+  }
   return {
-    text: 'bla',
+    text: 'Psst !',
+    link_names: true,
     blocks: [
       {
         type: 'section',
@@ -51,42 +101,7 @@ export const initDriver = (
         type: 'divider'
       } as DividerBlock,
       ...imageBlock,
-      {
-        type: 'section',
-        text: {
-          type: 'mrkdwn',
-          text:
-            '*Un chauffeur ! Un chauffeur ! Mon royaume pour un chauffeur !*'
-        },
-        accessory: {
-          type: 'button',
-          text: {
-            type: 'plain_text',
-            text: 'Je serai votre chauffeur'
-          },
-          style: 'primary',
-          confirm: {
-            title: {
-              text: "Votre mission si vous l'acceptez",
-              type: 'plain_text'
-            },
-            confirm: {
-              text: 'Accepter',
-              type: 'plain_text'
-            },
-            deny: {
-              text: 'Annuler',
-              type: 'plain_text'
-            },
-            text: {
-              text:
-                "Aller chercher la commande de tout le monde ce midi. :truck: Attention c'est une mission dangereuse, le sort de collègues affamés est entre vos mains ! :warning:",
-              type: 'mrkdwn'
-            }
-          },
-          value: 'user_accepted_drive'
-        }
-      } as SectionBlock,
+      ...driverBlock,
       {
         type: 'context',
         elements: [

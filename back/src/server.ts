@@ -8,6 +8,7 @@ import { Container } from 'typedi'
 import { createContainer } from './container'
 import * as health from './controllers/health'
 import * as init from './controllers/init'
+import * as slackEvents from './controllers/slack-actions'
 import { AppServer } from './server-utils/AppServer'
 import { errorHandler } from './server-utils/error-handler'
 
@@ -26,9 +27,10 @@ export async function createServer(): Promise<AppServer> {
     .use(koa_response_time())
     .use(helmet())
     .use(cors())
-    .use(bodyParser())
     .use(errorHandler(logger))
+    .use(bodyParser())
 
+  slackEvents.init(app)
   health.init(app)
   init.init(app)
 

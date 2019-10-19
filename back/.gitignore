@@ -3,6 +3,7 @@
 /tmp
 /out-tsc
 
+peko-peko-[0-9\-]*.json
 key.pem
 secrets
 node_modules

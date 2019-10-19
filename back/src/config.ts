@@ -9,5 +9,6 @@ export const serverConfig = {
 
 export const slackConfig = {
   token: _.SLACK_TOKEN,
-  channel: _.SLACK_CHANNEL
+  channel: _.SLACK_CHANNEL,
+  signingSecret: _.SLACK_SIGNING_SECRET
 }
